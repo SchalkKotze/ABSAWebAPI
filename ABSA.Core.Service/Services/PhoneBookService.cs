@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ABSA.Core.Service.ViewModels;
+using ABSA.Core.Service.Models;
+using AutoMapper;
+
+namespace ABSA.Core.Service.Services
+{
+    public class PhoneBookService : IPhoneBookService
+    {
+        private ABSAPhoneBookDbContext _phoneBookdb;
+        private readonly IMapper _mapper;
+
+        public PhoneBookService(IMapper mapper, ABSAPhoneBookDbContext context)
+        {
+            _mapper = mapper;
+            _phoneBookdb = context;
+        }
+
+        public List<PhoneBookViewModel> PhoneBook_GetAll()
+        {
+          
+            var data = _phoneBookdb.phonebook.ToList();             
+
+            return (List<PhoneBookViewModel>)_mapper.Map<IList<phonebook>,IList<PhoneBookViewModel>>(data);
+
+        }
+        public PhoneBookViewModel PhoneBook_Get(int PhoneBookID)
+        {
+          
+            var data = _phoneBookdb.phonebook
+                .Where(w => w.id == PhoneBookID).FirstOrDefault();
+            
+           return _mapper.Map<PhoneBookViewModel>(data);
+          
+        }
+        public long PhoneBook_Add(phonebook PhoneBook)
+        {
+            try
+            {
+                //  phonebook _PhoneBookAdd = new phonebook();
+                if (!String.IsNullOrEmpty(PhoneBook.phonebookname))
+                {
+                    _phoneBookdb.Add(PhoneBook);
+
+                    var result = _phoneBookdb.SaveChanges();
+
+                    long id = PhoneBook.id;
+
+                    return id;
+                }
+                else
+                    return -1;
+            }
+            catch (Exception Ex)
+            {
+                return -1;
+            }
+        }
+        public long PhoneBook_Edit(phonebook PhoneBook)
+        {
+            try
+            {
+                phonebook _PhoneBookAdd = _phoneBookdb.phonebook
+                    .Where(w => w.id == PhoneBook.id).FirstOrDefault();
+
+                _PhoneBookAdd.phonebookname = PhoneBook.phonebookname;
+                
+                _phoneBookdb.SaveChanges();
+
+                long id = _PhoneBookAdd.id;
+
+                return id;
+            }
+            catch (Exception Ex)
+            {
+                return -1;
+            }
+        }
+    }
+}

@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "DataSource=.\ABSAPhoneBook.sqlite3" Microsoft.EntityFrameworkCore.Sqlite -OutputDir Models -UseDatabaseNames -DataAnnotations -Tables phonebook, entry , PhoneBookView -ContextDir .\ -Context ABSAPhoneBookDbContext -Force 
