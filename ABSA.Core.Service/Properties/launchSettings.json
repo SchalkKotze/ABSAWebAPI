@@ -12,12 +12,12 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "PhoneAPI",
+      "launchUrl": "api",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Sebata.Business.Costing.Core.Service": {
+    "ABSA.Core.Service": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/Phonebook",
