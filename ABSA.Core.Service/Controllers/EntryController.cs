@@ -2,6 +2,7 @@
 using ABSA.Core.Service.Services;
 using ABSA.Core.Service.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 
 namespace ABSA.Core.Service.Controllers
 {
@@ -17,30 +18,53 @@ namespace ABSA.Core.Service.Controllers
         [HttpGet("api/Entries")]
         public IActionResult Entry_GetAll()
         {
-            var multipleTransactions = _service.Entry_GetAll();
-            return Ok(multipleTransactions);
+            try 
+            { 
+                var multipleTransactions = _service.Entry_GetAll();
+                return Ok(multipleTransactions);
+         
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("api/Entries/{entryID}")]
         public IActionResult Entry_Get(int entryID)
         {
-            var singleTransactions = _service.Entry_Get(entryID);
-            return Ok(singleTransactions);
+            try
+            {
+
+                var singleTransactions = _service.Entry_Get(entryID);
+                return Ok(singleTransactions);
+            }            
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [Route("api/Entries_Add")]
         [HttpPost]
         public IActionResult Entry_Add([FromBody] entry _entry)
         {
-            var entryID = _service.Entry_Add(_entry);
+            try
+            {
+                var entryID = _service.Entry_Add(_entry);
 
-            if (entryID > 0)
-            {
-                return Ok(entryID);
+                if (entryID > 0)
+                {
+                    return Ok(entryID);
+                }
+                else
+                {
+                    return Conflict(entryID);
+                }
             }
-            else
+            catch
             {
-                return Conflict(entryID);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -48,15 +72,22 @@ namespace ABSA.Core.Service.Controllers
         [HttpPost]
         public IActionResult Entries_Edit([FromBody] entry _entryPass)
         {
-            var entryID = _service.Entry_Edit(_entryPass);
+            try
+            {
+                var entryID = _service.Entry_Edit(_entryPass);
 
-            if (entryID > 0)
+                if (entryID > 0)
+                {
+                    return Ok(entryID);
+                }
+                else
+                {
+                    return Conflict(entryID);
+                }
+            }            
+            catch
             {
-                return Ok(entryID);
-            }
-            else
-            {
-                return Conflict(entryID);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
