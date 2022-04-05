@@ -2,6 +2,7 @@
 using ABSA.Core.Service.Services;
 using ABSA.Core.Service.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 
 namespace ABSA.Core.Service.Controllers
 {
@@ -17,20 +18,37 @@ namespace ABSA.Core.Service.Controllers
         [HttpGet("api/PhoneBook")]
         public IActionResult PhoneBook_GetAll()
         {
-            var multipleTransactions = _service.PhoneBook_GetAll();
-            return Ok(multipleTransactions);
+            try
+            {
+                var multipleTransactions = _service.PhoneBook_GetAll();
+                return Ok(multipleTransactions);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("api/PhoneBook/{phoneBookID}")]
         public IActionResult PhoneBook_Get(int phoneBookID)
         {
-            var singleTransactions = _service.PhoneBook_Get(phoneBookID);
-            return Ok(singleTransactions);
+            try
+            {
+                var singleTransactions = _service.PhoneBook_Get(phoneBookID);
+                return Ok(singleTransactions);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
+
         [Route("api/PhoneBook_Add")]
         [HttpPost]
         public IActionResult PhoneBook_Add([FromBody] phonebook _PhoneBook)
-        {            
+        {
+            try 
+            { 
                 var phoneID = _service.PhoneBook_Add(_PhoneBook);
 
                 if (phoneID > 0)
@@ -40,21 +58,34 @@ namespace ABSA.Core.Service.Controllers
                 else
                 {
                     return Conflict(phoneID);
-                }            
+                }
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
+        
         [Route("api/PhoneBook_Edit")]
         [HttpPost]
         public IActionResult PhoneBook_Edit([FromBody] phonebook _PhoneBook)
         {
-            var phoneID = _service.PhoneBook_Edit(_PhoneBook);
+            try
+            {
+                var phoneID = _service.PhoneBook_Edit(_PhoneBook);
 
-            if (phoneID > 0)
-            {
-                return Ok(phoneID);
+                if (phoneID > 0)
+                {
+                    return Ok(phoneID);
+                }
+                else
+                {
+                    return Conflict(phoneID);
+                }
             }
-            else
+            catch
             {
-                return Conflict(phoneID);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

@@ -19,34 +19,19 @@ namespace ABSA.Core.Service.Services
         }
 
         public List<PhoneBookViewModel> PhoneBook_GetAll()
-        {
-            try 
-            { 
-                var data = _phoneBookdb.phonebook.ToList();
-
-                return (List<PhoneBookViewModel>)_mapper.Map<IList<phonebook>,IList<PhoneBookViewModel>>(data);
-            }
-            catch
-            {
-                return new List<PhoneBookViewModel>();
-            }
-
-}
-        public PhoneBookViewModel PhoneBook_Get(int PhoneBookID)
-        {
-            try
-            {
-                var data = _phoneBookdb.phonebook
-                            .Where(w => w.id == PhoneBookID).FirstOrDefault();
-            
-                return _mapper.Map<PhoneBookViewModel>(data);
-            }
-            catch
-            {
-                return new PhoneBookViewModel();
-            }
-
+        {             
+            var data = _phoneBookdb.phonebook.ToList();
+            return (List<PhoneBookViewModel>)_mapper.Map<IList<phonebook>,IList<PhoneBookViewModel>>(data);
         }
+
+        public PhoneBookViewModel PhoneBook_Get(int PhoneBookID)
+        {            
+            var data = _phoneBookdb.phonebook
+                 .Where(w => w.id == PhoneBookID).FirstOrDefault();
+            
+            return _mapper.Map<PhoneBookViewModel>(data);
+        }
+
         public long PhoneBook_Add(phonebook PhoneBook)
         {
             try
