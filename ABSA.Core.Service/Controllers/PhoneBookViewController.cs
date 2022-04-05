@@ -20,6 +20,7 @@ namespace ABSA.Core.Service.Controllers
             var multipleRows = _service.PhoneBook_Search("");
             return Ok(multipleRows);
         }
+
         [HttpGet("api/PhoneBookView/{SearchString}")]
         public IActionResult PhoneBookView_Get(string SearchString)
         {

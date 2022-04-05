@@ -20,32 +20,42 @@ namespace ABSA.Core.Service.Services
 
         public List<PhoneBookViewModel> PhoneBook_GetAll()
         {
-          
-            var data = _phoneBookdb.phonebook.ToList();             
+            try 
+            { 
+                var data = _phoneBookdb.phonebook.ToList();
 
-            return (List<PhoneBookViewModel>)_mapper.Map<IList<phonebook>,IList<PhoneBookViewModel>>(data);
+                return (List<PhoneBookViewModel>)_mapper.Map<IList<phonebook>,IList<PhoneBookViewModel>>(data);
+            }
+            catch
+            {
+                return new List<PhoneBookViewModel>();
+            }
 
-        }
+}
         public PhoneBookViewModel PhoneBook_Get(int PhoneBookID)
         {
-          
-            var data = _phoneBookdb.phonebook
-                .Where(w => w.id == PhoneBookID).FirstOrDefault();
+            try
+            {
+                var data = _phoneBookdb.phonebook
+                            .Where(w => w.id == PhoneBookID).FirstOrDefault();
             
-           return _mapper.Map<PhoneBookViewModel>(data);
-          
+                return _mapper.Map<PhoneBookViewModel>(data);
+            }
+            catch
+            {
+                return new PhoneBookViewModel();
+            }
+
         }
         public long PhoneBook_Add(phonebook PhoneBook)
         {
             try
-            {
-                //  phonebook _PhoneBookAdd = new phonebook();
+            {               
                 if (!String.IsNullOrEmpty(PhoneBook.phonebookname))
                 {
                     _phoneBookdb.Add(PhoneBook);
 
                     var result = _phoneBookdb.SaveChanges();
-
                     long id = PhoneBook.id;
 
                     return id;
@@ -53,7 +63,7 @@ namespace ABSA.Core.Service.Services
                 else
                     return -1;
             }
-            catch (Exception Ex)
+            catch 
             {
                 return -1;
             }
@@ -62,18 +72,18 @@ namespace ABSA.Core.Service.Services
         {
             try
             {
-                phonebook _PhoneBookAdd = _phoneBookdb.phonebook
+                phonebook _PhoneBookEdit = _phoneBookdb.phonebook
                     .Where(w => w.id == PhoneBook.id).FirstOrDefault();
 
-                _PhoneBookAdd.phonebookname = PhoneBook.phonebookname;
+                _PhoneBookEdit.phonebookname = PhoneBook.phonebookname;
                 
                 _phoneBookdb.SaveChanges();
 
-                long id = _PhoneBookAdd.id;
+                long id = _PhoneBookEdit.id;
 
                 return id;
             }
-            catch (Exception Ex)
+            catch 
             {
                 return -1;
             }

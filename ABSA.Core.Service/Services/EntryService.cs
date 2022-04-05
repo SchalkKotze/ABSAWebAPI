@@ -20,43 +20,45 @@ namespace ABSA.Core.Service.Services
 
         public List<EntryViewModel> Entry_GetAll()
         {
-          
-            var data = _entrydb.entry.ToList();
-
-            return (List<EntryViewModel>)_mapper.Map<IList<entry>, IList<EntryViewModel>>(data);
-
+            try
+            {
+                var data = _entrydb.entry.ToList();
+                return (List<EntryViewModel>)_mapper.Map<IList<entry>, IList<EntryViewModel>>(data);
+            }
+            catch
+            {
+                return new List<EntryViewModel>();
+            }
         }
         public EntryViewModel Entry_Get(int EntryID)
         {
-        
-            var data = _entrydb.entry
-                .Where(w => w.id == EntryID ).FirstOrDefault();
+            try 
+            {  
+                var data = _entrydb.entry
+                    .Where(w => w.id == EntryID ).FirstOrDefault();
 
-            return _mapper.Map<EntryViewModel>(data);
-
-        }
+                return _mapper.Map<EntryViewModel>(data);
+            }
+            catch
+            {
+                return new EntryViewModel();
+            }
+}
         public long Entry_Add(entry Entry)
         {
             try
             {
-                entry _EntryAdd = new entry();
-
-                _EntryAdd.name = Entry.name;
-                _EntryAdd.phonenumber = Entry.phonenumber;
-                _EntryAdd.phonebookid = Entry.phonebookid;
-
-                _entrydb.Add(_EntryAdd);
-
+                _entrydb.Add(Entry);
                 _entrydb.SaveChanges();
 
-                long id = _EntryAdd.id;
+                long id = Entry.id;
 
                 return id;
             }
-            catch {
+            catch 
+            {
                 return -1;
             }
-
         }
 
         public long Entry_Edit(entry Entry)

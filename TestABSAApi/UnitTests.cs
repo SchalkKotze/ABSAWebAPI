@@ -19,10 +19,10 @@ namespace TestABSAApi
             .UseInMemoryDatabase(databaseName: "PhoneBook")
             .Options;
 
-            var _context = new ABSAPhoneBookDbContext(options);
+            var context = new ABSAPhoneBookDbContext(options);
 
             var mapperMock = new Mock<IMapper>();
-            _service = new ABSA.Core.Service.Services.PhoneBookService(mapperMock.Object, _context);
+            _service = new ABSA.Core.Service.Services.PhoneBookService(mapperMock.Object, context);
         }
 
         [Test]
